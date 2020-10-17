@@ -1,0 +1,154 @@
+swagger: "2.0"
+info:
+  title: beego Test API
+  description: beego has a very cool tools to autogenerate documents for your API
+  version: 1.0.0
+  termsOfService: http://beego.me/
+  contact:
+    email: astaxie@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+basePath: /v1
+paths:
+  /book/:
+    get:
+      tags:
+      - book
+      description: get all Books
+      operationId: BookController.GetAll
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Book'
+    post:
+      tags:
+      - book
+      description: create books
+      operationId: BookController.CreateBook
+      parameters:
+      - in: body
+        name: body
+        description: body for book content
+        required: true
+        schema:
+          $ref: '#/definitions/models.Book'
+      responses:
+        "200":
+          description: '{int} models.Book.ID'
+        "403":
+          description: body is empty
+  /book/{uid}:
+    get:
+      tags:
+      - book
+      description: get book by uid
+      operationId: BookController.Get
+      parameters:
+      - in: path
+        name: uid
+        description: The key for staticblock
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Book'
+        "403":
+          description: :uid is empty
+    put:
+      tags:
+      - book
+      description: update the book
+      operationId: BookController.Update
+      parameters:
+      - in: path
+        name: uid
+        description: The uid you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: body for user content
+        required: true
+        schema:
+          $ref: '#/definitions/models.Book'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Book'
+        "403":
+          description: :uid is not int
+    delete:
+      tags:
+      - book
+      description: delete the book
+      operationId: BookController.Delete
+      parameters:
+      - in: path
+        name: uid
+        description: The uid you want to delete
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} delete success!'
+        "403":
+          description: uid is empty
+  /book/file:
+    post:
+      tags:
+      - book
+      description: uplaod image to the system
+      operationId: BookController.Uplaod_Image
+      parameters:
+      - in: file
+        name: file
+        description: The file for uplading image
+        required: true
+        type: file
+      responses:
+        "200":
+          description: '{string} upload success'
+        "403":
+          description: book not exist
+definitions:
+  models.Author:
+    title: Author
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+  models.Book:
+    title: Book
+    type: object
+    properties:
+      _id:
+        $ref: '#/definitions/primitive.ObjectID'
+      author:
+        $ref: '#/definitions/models.Author'
+      title:
+        type: string
+  models.Object:
+    title: Object
+    type: object
+    properties:
+      ObjectId:
+        type: string
+      PlayerName:
+        type: string
+      Score:
+        type: integer
+        format: int64
+  primitive.ObjectID:
+    title: ObjectID
+    type: object
+tags:
+- name: book
+  description: |
+    Operations about Books
